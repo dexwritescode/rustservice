@@ -1,3 +1,9 @@
+use settings::Settings;
+
+mod settings;
+
 fn main() {
-    println!("Hello, world!");
+
+    let settings = Settings::new().expect("Error setting up the configurations.");
+    println!("Using: server.port: {}", settings.server.port);
 }

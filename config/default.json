@@ -1,0 +1,23 @@
+{
+    "environment": "development",
+
+    "server" : {
+        "host" : "localhost",
+        "port" : 8080,
+        "name" : "DB NAME",
+        "user" : "DB USER",
+        "password" : "DB PASSWORD"
+    },
+
+    "database": {
+        "host": "localhost",
+        "port": 7890,
+        "name": "db name",
+        "user": "db user",
+        "password": "db password"
+      },
+
+    "logger": {
+        "level": "debug"
+      }
+}
