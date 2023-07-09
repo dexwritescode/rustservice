@@ -4,17 +4,17 @@
     "server" : {
         "host" : "localhost",
         "port" : 8080,
-        "name" : "DB NAME",
-        "user" : "DB USER",
-        "password" : "DB PASSWORD"
+        "db_name" : "DB NAME",
+        "db_user" : "DB USER",
+        "db_password" : "DB PASSWORD"
     },
 
     "database": {
         "host": "localhost",
-        "port": 7890,
-        "name": "db name",
-        "user": "db user",
-        "password": "db password"
+        "port": 5432,
+        "name": "rustservice",
+        "user": "rustservice",
+        "password": "rustservice"
       },
 
     "logger": {

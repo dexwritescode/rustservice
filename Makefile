@@ -23,3 +23,11 @@ buildrelease:
 .PHONY: runrelease
 runrelease:
 	cargo run --release
+
+.PHONY: platform-start
+platform-start:
+	docker-compose -f docker-compose.yml up -d
+
+.PHONY: platform-stop
+platform-stop:
+	docker-compose -f docker-compose.yml down

@@ -1,0 +1,24 @@
+version: '3.1'
+
+services:
+  
+  rustservice:
+    build: .
+    ports:
+      - 8090:8080
+  
+  db:
+    image: postgres
+    restart: always
+    ports:
+        - 5432:5432
+    environment:
+      POSTGRES_USER: "rustservice"
+      POSTGRES_PASSWORD: "rustservice"
+      POSTGRES_DB: "rustservice"
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
