@@ -3,12 +3,16 @@ version: '3.1'
 services:
   
   rustservice:
+    container_name: rustservice
+    profiles: ["service"]
     build: .
     ports:
       - 8090:8080
   
   db:
+    container_name: db
     image: postgres
+    profiles: ["infrastructure"]
     restart: always
     ports:
         - 5432:5432
@@ -17,8 +21,26 @@ services:
       POSTGRES_PASSWORD: "rustservice"
       POSTGRES_DB: "rustservice"
 
+  jaeger:
+    container_name: jaeger
+    image: jaegertracing/all-in-one:latest
+    profiles: ["tracing"]
+    ports:
+      - "16686:16686"
+      - "14268:14268"
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+      - LOG_LEVEL=debug
+    #networks:
+    #  - jaeger-example
+
   adminer:
+    container_name: adminer
     image: adminer
+    profiles: ["infrastructure"]
     restart: always
     ports:
       - 8080:8080
+
+#networks:
+#  jaeger-example:
