@@ -32,8 +32,24 @@ runrelease: ## Compile and run the service in release mode
 
 .PHONY: platform-start
 platform-start: ## Start the service and its infrastructure dependencies
-	docker-compose -f docker-compose.yml up -d
+	docker-compose -f docker-compose.yml --profile infrastructure up -d
 
 .PHONY: platform-stop
 platform-stop: ## Stop the service and its infrastructure dependencies
-	docker-compose -f docker-compose.yml down
+	docker-compose -f docker-compose.yml --profile infrastructure down
+
+.PHONY: start
+start: ## Start the service
+	docker-compose -f docker-compose.yml --profile service up -d
+
+.PHONY: stop
+stop: ## Stop the service
+	docker-compose -f docker-compose.yml --profile service down
+
+.PHONY: tracing-start
+tracing-start: ## Start Jaeger tracing
+	docker-compose -f docker-compose.yml --profile tracing up -d
+
+.PHONY: tracing-stop
+tracing-stop: ## Stop Jaeger tracing
+	docker-compose -f docker-compose.yml --profile tracing down
