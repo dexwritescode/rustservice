@@ -4,8 +4,6 @@ authors = ["Dex <dexwritescode@gmail.com>"]
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 config = "0.13.3"
 serde = { version = "1.0.164", features = ["derive"] }
@@ -14,3 +12,5 @@ serde_derive = "1.0.152"
 axum = { version = "0.6.18", features = ["headers"] }
 tokio = { version = "1.29.1", features = ["full"] }
 signal-hook = "0.3.16"
+signal-hook-tokio = {version = "0.3.1", features = ["futures-v0_3"]}
+futures = "0.3"
