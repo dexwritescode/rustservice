@@ -36,7 +36,7 @@ platform-start: ## Start the service and its infrastructure dependencies
 
 .PHONY: platform-stop
 platform-stop: ## Stop the service and its infrastructure dependencies
-	docker-compose -f docker-compose.yml --profile infrastructure down
+	docker-compose -f docker-compose.yml --profile infrastructure stop
 
 .PHONY: start
 start: ## Start the service
@@ -44,7 +44,7 @@ start: ## Start the service
 
 .PHONY: stop
 stop: ## Stop the service
-	docker-compose -f docker-compose.yml --profile service down
+	docker-compose -f docker-compose.yml --profile service stop
 
 .PHONY: tracing-start
 tracing-start: ## Start Jaeger tracing
@@ -52,4 +52,4 @@ tracing-start: ## Start Jaeger tracing
 
 .PHONY: tracing-stop
 tracing-stop: ## Stop Jaeger tracing
-	docker-compose -f docker-compose.yml --profile tracing down
+	docker-compose -f docker-compose.yml --profile tracing stop

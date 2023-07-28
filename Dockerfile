@@ -8,4 +8,4 @@ FROM debian:bullseye-slim
 WORKDIR /usr/local/bin
 COPY --from=builder /usr/local/cargo/bin/rustservice .
 COPY --from=builder /usr/src/rustservice/config config
-CMD ["rustservice"]
+ENTRYPOINT ["rustservice"]
