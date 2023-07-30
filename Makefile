@@ -39,7 +39,7 @@ platform-stop: ## Stop the service and its infrastructure dependencies
 	docker-compose -f docker-compose.yml --profile infrastructure stop
 
 .PHONY: start
-start: ## Start the service
+start: builddocker ## Start the service
 	docker-compose -f docker-compose.yml --profile service up -d
 
 .PHONY: stop
