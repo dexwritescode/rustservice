@@ -1,5 +1,7 @@
-use std::{net::SocketAddr, sync::{atomic::{AtomicBool, Ordering}, Arc}};
+use std::net::SocketAddr;
 use settings::Settings;
+
+use tokio::sync::{oneshot, oneshot::Sender, oneshot::Receiver};
 
 use signal_hook::consts::signal::{SIGHUP, SIGINT, SIGQUIT, SIGTERM};
 use signal_hook_tokio::Signals;
@@ -9,7 +11,7 @@ use futures::stream::StreamExt;
 mod app;
 mod settings;
 
-async fn handle_signals(mut signals: Signals, recieved: Arc<AtomicBool>) {
+async fn handle_signals(mut signals: Signals, tx: Sender<()>) {
     while let Some(signal) = signals.next().await {
         match signal {
             SIGHUP => {
@@ -17,7 +19,7 @@ async fn handle_signals(mut signals: Signals, recieved: Arc<AtomicBool>) {
             }
             SIGTERM | SIGINT | SIGQUIT => {
                 // Set the received boolean flag
-                recieved.store(true, Ordering::SeqCst);
+                let _ = tx.send(());
                 return ;
             },
             _ => unreachable!(),
@@ -42,17 +44,18 @@ async fn main() {
         SIGQUIT,
     ]).unwrap();
     signals.handle();
-    let recieved = Arc::new(AtomicBool::new(false));
-    let signals_task = tokio::spawn(handle_signals(signals, Arc::clone(&recieved)));
+
+    let (tx, rx): (Sender<()>, Receiver<()>) = oneshot::channel();
+
+    let _signals_task = tokio::spawn(handle_signals(signals, tx));
 
     axum::Server::bind(&address)
     .serve(app.into_make_service())
     .with_graceful_shutdown(async {
-        signals_task.await.unwrap();
-        if recieved.load(Ordering::SeqCst) {
-            println!("Gracefully shutting down the system!");
-            println!("Should close resources, drain REST calls, shutdown event handler gracefully...etc");
-        }
+        rx.await.ok();
+        println!("Gracefully shutting down the system!");
+        println!("Should close resources, drain REST calls, shutdown event handler gracefully...etc");
+        
     })
     .await
     .expect("Failed to start server");
