@@ -1,10 +1,9 @@
-use std::net::SocketAddr;
 use settings::Settings;
+use std::net::SocketAddr;
 
 mod app;
 mod settings;
 mod shutdown;
-
 
 #[tokio::main]
 async fn main() {
@@ -18,13 +17,14 @@ async fn main() {
     let rx = shutdown::register();
 
     axum::Server::bind(&address)
-    .serve(app.into_make_service())
-    .with_graceful_shutdown(async {
-        rx.await.ok();
-        println!("Gracefully shutting down the system!");
-        println!("Should close resources, drain REST calls, shutdown event handler gracefully...etc");
-        
-    })
-    .await
-    .expect("Failed to start server");
+        .serve(app.into_make_service())
+        .with_graceful_shutdown(async {
+            rx.await.ok();
+            println!("Gracefully shutting down the system!");
+            println!(
+                "Should close resources, drain REST calls, shutdown event handler gracefully...etc"
+            );
+        })
+        .await
+        .expect("Failed to start server");
 }

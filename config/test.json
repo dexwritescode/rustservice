@@ -1,7 +1,6 @@
 {
-    "environment": "test",
-
-    "logger": {
-        "level": "error"
-      }
+  "environment": "test",
+  "logger": {
+    "level": "error"
+  }
 }
