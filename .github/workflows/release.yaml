@@ -1,0 +1,17 @@
+name: Create release on merge to main branch
+
+on: 
+  push:
+    branches:
+      - main
+
+jobs:
+  release-on-push:
+    name: Create release
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: dexwritescode/release-on-merge-action@v0.2.0
+        with:
+          version-increment-strategy: patch
