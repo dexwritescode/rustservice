@@ -60,3 +60,15 @@ impl fmt::Display for Server {
         write!(f, "http://localhost:{}", &self.port)
     }
 }
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_load_prod_config() {
+        env::set_var("ENV", "production");
+        let config = Configurations::new().unwrap();
+        assert_eq!(config.environment, "production");
+    }
+}
