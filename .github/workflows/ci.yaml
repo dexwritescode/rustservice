@@ -19,6 +19,7 @@ jobs:
       fail-fast: true
     steps:
       - uses: actions/checkout@v4
+      - uses: Swatinem/rust-cache@v2
       - run: |
           cargo version
           cargo check
