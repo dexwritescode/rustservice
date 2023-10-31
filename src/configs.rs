@@ -23,14 +23,14 @@ pub struct Database {
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub struct Settings {
+pub struct Configurations {
     pub environment: String,
     pub server: Server,
     pub logger: Logger,
     pub database: Database,
 }
 
-impl Settings {
+impl Configurations {
     pub fn new() -> Result<Self, ConfigError> {
         let env = env::var("ENV").unwrap_or_else(|_| "development".into());
 
