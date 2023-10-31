@@ -23,14 +23,14 @@ pub struct Database {
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub struct Settings {
+pub struct Configurations {
     pub environment: String,
     pub server: Server,
     pub logger: Logger,
     pub database: Database,
 }
 
-impl Settings {
+impl Configurations {
     pub fn new() -> Result<Self, ConfigError> {
         let env = env::var("ENV").unwrap_or_else(|_| "development".into());
 
@@ -58,5 +58,17 @@ impl Settings {
 impl fmt::Display for Server {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "http://localhost:{}", &self.port)
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_load_prod_config() {
+        env::set_var("ENV", "production");
+        let config = Configurations::new().unwrap();
+        assert_eq!(config.environment, "production");
     }
 }
