@@ -9,7 +9,7 @@ mod shutdown;
 async fn main() {
     let app = app::create_app().await;
 
-    let config = Configurations::new().expect("Error setting up the configurations.");
+    let config = Configurations::new().expect("Error loading the configurations.");
     println!("Using: server.port: {}", config.server.port);
 
     let address = SocketAddr::from(([127, 0, 0, 1], config.server.port));
