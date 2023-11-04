@@ -2,10 +2,7 @@
   "environment": "development",
   "server": {
     "host": "localhost",
-    "port": 8080,
-    "db_name": "rustservice",
-    "db_user": "rustservice",
-    "db_password": "rustservice"
+    "port": 8080
   },
   "database": {
     "host": "localhost",

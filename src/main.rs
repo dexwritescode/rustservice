@@ -12,7 +12,9 @@ async fn main() {
     let config = Configurations::new().expect("Error loading the configurations.");
     println!("Using: server.port: {}", config.server.port);
 
-    let address = SocketAddr::from(([127, 0, 0, 1], config.server.port));
+    let address: SocketAddr = format!("{}:{}", config.server.host, config.server.port)
+        .parse()
+        .expect("Unable to parse socket address");
 
     let rx = shutdown::register();
 

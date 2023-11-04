@@ -5,6 +5,7 @@ use std::{env, fmt};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Server {
+    pub host: String,
     pub port: u16,
 }
 
@@ -67,8 +68,27 @@ mod test {
 
     #[test]
     fn test_load_prod_config() {
-        env::set_var("ENV", "production");
-        let config = Configurations::new().unwrap();
-        assert_eq!(config.environment, "production");
+        temp_env::with_vars([("ENV", Some("production"))], || {
+            let actual = Configurations::new().unwrap();
+            assert_eq!(actual.environment, "production");
+            assert_eq!(actual.logger.level, "info");
+            assert_eq!(actual.server.host, "localhost");
+            assert_eq!(actual.server.port, 8080);
+            assert_eq!(actual.database.host, "localhost");
+            assert_eq!(actual.database.port, 5432);
+            assert_eq!(actual.database.name, "rustservice");
+            assert_eq!(actual.database.user, "rustservice");
+            assert_eq!(actual.database.password, "rustservice");
+        });
+    }
+
+    #[test]
+    fn test_override_port() {
+        temp_env::with_vars([("PORT", Some("8899"))], || {
+            let actual = Configurations::new().unwrap();
+            assert_eq!(actual.environment, "development");
+            assert_eq!(actual.server.port, 8899);
+            assert_eq!(actual.logger.level, "debug");
+        });
     }
 }
