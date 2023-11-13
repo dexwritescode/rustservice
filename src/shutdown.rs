@@ -19,9 +19,7 @@ async fn handle_signals(mut signals: Signals, tx: Sender<()>) {
                 // Reload configuration, reopen the log file...etc
             }
             SIGTERM | SIGINT | SIGQUIT => {
-                // Set the received boolean flag
-                // Drain any queues, close resources, and stop processing
-                // gracefully before the server shuts down
+                // Gracefully shut down
                 let _ = tx.send(());
                 return;
             }
