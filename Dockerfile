@@ -1,11 +1,11 @@
-FROM rust:1.67 as builder
-WORKDIR /usr/src/rustservice
-COPY . .
-RUN cargo install --path .
+FROM rust:1.73-bookworm as builder
 
-FROM debian:bullseye-slim
-#RUN apt-get update && apt-get install -y extra-runtime-dependencies && rm -rf /var/lib/apt/lists/*
-WORKDIR /usr/local/bin
-COPY --from=builder /usr/local/cargo/bin/rustservice .
-COPY --from=builder /usr/src/rustservice/config config
-ENTRYPOINT ["rustservice"]
+WORKDIR /rustservice
+COPY . .
+RUN cargo build --release
+
+FROM gcr.io/distroless/cc-debian12 AS runtime
+WORKDIR /app
+COPY --from=builder /rustservice/config /app/config
+COPY --from=builder /rustservice/target/release/rustservice /app/rustservice
+ENTRYPOINT ["/app/rustservice"]

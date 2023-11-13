@@ -1,5 +1,4 @@
 use config::{Config, ConfigError, Environment, File};
-//use lazy_static::lazy_static;
 use serde::Deserialize;
 use std::{env, fmt};
 
@@ -72,7 +71,7 @@ mod test {
             let actual = Configurations::new().unwrap();
             assert_eq!(actual.environment, "production");
             assert_eq!(actual.logger.level, "info");
-            assert_eq!(actual.server.host, "localhost");
+            assert_eq!(actual.server.host, "0.0.0.0");
             assert_eq!(actual.server.port, 8080);
             assert_eq!(actual.database.host, "localhost");
             assert_eq!(actual.database.port, 5432);
