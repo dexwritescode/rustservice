@@ -2,8 +2,8 @@ version: '3.1'
 
 services:
   
-  rustservice:
-    container_name: rustservice
+  todoservice:
+    container_name: todoservice
     profiles: ["service"]
     build: .
     ports:
@@ -11,15 +11,15 @@ services:
   
   db:
     container_name: db
-    image: postgres
+    image: postgres:16
     profiles: ["infrastructure"]
     restart: always
     ports:
         - 5432:5432
     environment:
-      POSTGRES_USER: "rustservice"
-      POSTGRES_PASSWORD: "rustservice"
-      POSTGRES_DB: "rustservice"
+      POSTGRES_USER: "todouser"
+      POSTGRES_PASSWORD: "todopassword"
+      POSTGRES_DB: "tododb"
 
   jaeger:
     container_name: jaeger

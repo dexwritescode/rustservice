@@ -75,9 +75,9 @@ mod test {
             assert_eq!(actual.server.port, 8080);
             assert_eq!(actual.database.host, "localhost");
             assert_eq!(actual.database.port, 5432);
-            assert_eq!(actual.database.name, "rustservice");
-            assert_eq!(actual.database.user, "rustservice");
-            assert_eq!(actual.database.password, "rustservice");
+            assert_eq!(actual.database.name, "tododb");
+            assert_eq!(actual.database.user, "todouser");
+            assert_eq!(actual.database.password, "todopassword");
         });
     }
 

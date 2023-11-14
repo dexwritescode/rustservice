@@ -15,7 +15,17 @@ async fn main() {
         .parse()
         .expect("Unable to parse socket address");
     let rx = shutdown::register();
+
+    // TODO Rust Service
+    // Add routes: Create, Update, Delete, Generate Random
+    // Move the router to a separate module
+    // Call external API when the Generate Random API is called and store the result
+    // Use Diesel and postgres to persist the data
+    // Handle errors with thiserror and anyhow
+    // Use spans to display tracing in jaeger
+    // Display logs in ELK stack
     let app = app::create_app().await;
+
     tracing::info!("Starting server on {:?}", address);
     axum::Server::bind(&address)
         .serve(app.into_make_service())
