@@ -1,6 +1,6 @@
-# rustservice
+# todoservice
 
-[![CI](https://github.com/dexwritescode/rustservice/actions/workflows/ci.yaml/badge.svg)](https://github.com/dexwritescode/rustservice/actions/workflows/ci.yaml)
+[![CI](https://github.com/dexwritescode/todoservice/actions/workflows/ci.yaml/badge.svg)](https://github.com/dexwritescode/todoservice/actions/workflows/ci.yaml)
 
 RESTful Rust service template
 

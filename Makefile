@@ -7,12 +7,12 @@ help: ## Display this help
 
 .PHONY: builddocker
 builddocker: ## Build the docker image
-	docker build -t rustservice .
+	docker build -t todoservice .
 
 .PHONY: rundocker
 rundocker: ## Run the service container
-	#docker run -it --rm --name rustservice rustservice
-	docker run --rm --name rustservice rustservice
+	#docker run -it --rm --name todoservice todoservice
+	docker run --rm --name todoservice todoservice
 
 .PHONY: build
 build: ## Compile the service

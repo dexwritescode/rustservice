@@ -15,7 +15,9 @@ async fn main() {
         .parse()
         .expect("Unable to parse socket address");
     let rx = shutdown::register();
+
     let app = app::create_app().await;
+
     tracing::info!("Starting server on {:?}", address);
     axum::Server::bind(&address)
         .serve(app.into_make_service())

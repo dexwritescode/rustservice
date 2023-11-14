@@ -1,5 +1,5 @@
 [package]
-name = "rustservice"
+name = "todoservice"
 authors = ["Dex <dexwritescode@protom.me>"]
 version = "0.1.0"
 edition = "2021"
@@ -17,6 +17,8 @@ anyhow = "1"
 thiserror = "1"
 tracing = "0.1.40"
 tracing-subscriber = "0.3.17"
+diesel = { version = "2.1.0", features = ["postgres"] }
+dotenvy = "0.15"
 
 [dev-dependencies]
 temp-env = "0.3.6"
