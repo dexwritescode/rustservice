@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/dexwritescode/todoservice/actions/workflows/ci.yaml/badge.svg)](https://github.com/dexwritescode/todoservice/actions/workflows/ci.yaml)
 
-RESTful Rust service template
+RESTful Rust TODO service
 
 ## License
 
