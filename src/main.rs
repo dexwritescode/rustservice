@@ -3,6 +3,9 @@ use std::net::SocketAddr;
 
 mod app;
 mod configs;
+mod database;
+pub mod models;
+pub mod schema;
 mod shutdown;
 
 #[tokio::main]
@@ -11,12 +14,14 @@ async fn main() {
     tracing_subscriber::fmt::init();
 
     let config = Configurations::new().expect("Error loading the configurations.");
+
+    let app_state = database::get_connection_pool(&config);
+    let app = app::create_app(app_state);
+
     let address: SocketAddr = format!("{}:{}", config.server.host, config.server.port)
         .parse()
         .expect("Unable to parse socket address");
     let rx = shutdown::register();
-
-    let app = app::create_app().await;
 
     tracing::info!("Starting server on {:?}", address);
     axum::Server::bind(&address)
