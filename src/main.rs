@@ -11,7 +11,9 @@ mod shutdown;
 #[tokio::main]
 async fn main() {
     // initialize tracing
-    tracing_subscriber::fmt::init();
+    tracing_subscriber::fmt()
+        .with_max_level(tracing::Level::DEBUG)
+        .init();
 
     let config = Configurations::new().expect("Error loading the configurations.");
 
