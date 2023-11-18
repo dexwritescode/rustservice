@@ -1,6 +1,6 @@
 use diesel::prelude::*;
 
-#[derive(serde::Serialize, Queryable, Selectable)]
+#[derive(serde::Serialize, Queryable, Selectable, Debug)]
 #[diesel(table_name = crate::schema::todos)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct Todo {

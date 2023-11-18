@@ -1,6 +1,10 @@
 use axum::extract::Path;
 use axum::http::StatusCode;
-use axum::{extract::State, routing::delete, routing::get, routing::post, Json, Router};
+use axum::{
+    extract::State,
+    routing::{delete, get, post, put},
+    Json, Router,
+};
 use diesel::prelude::*;
 use diesel::RunQueryDsl;
 use std::sync::Arc;
@@ -17,6 +21,7 @@ pub fn create_app(state: AppState) -> Router {
     Router::new()
         .route("/todo/:todo_id", get(get_todo))
         .route("/todo/:todo_id", delete(delete_todo))
+        .route("/todo/:todo_id", put(complete_todo))
         .route("/todo", post(create_todo))
         .route("/todo", get(get_all_todos))
         .route("/todo/random", post(create_random_todo))
@@ -60,6 +65,25 @@ async fn get_todo(
         Ok(None) => Err(not_found_error(&format!("Unable to find todo {}", todo_id))),
         Err(e) => Err(internal_error(e)),
     }
+}
+
+async fn complete_todo(
+    State(state): State<Arc<AppState>>,
+    Path(todo_id): Path<i32>,
+) -> Result<(), (StatusCode, String)> {
+    let mut conn = state.pool.get().map_err(internal_error)?;
+
+    tracing::info!("Marking Todo as completed. id: {}", &todo_id);
+
+    let todo = diesel::update(todos::dsl::todos.find(todo_id))
+        .set(todos::completed.eq(true))
+        .returning(Todo::as_returning())
+        .get_result(&mut conn)
+        .map_err(internal_error)?;
+
+    tracing::info!("Completed Todo {:?}", &todo);
+
+    Ok(())
 }
 
 async fn delete_todo(
