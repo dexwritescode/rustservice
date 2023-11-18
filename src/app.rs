@@ -18,6 +18,7 @@ pub fn create_app(state: AppState) -> Router {
         .route("/todo/:todo_id", get(get_todo))
         .route("/todo/:todo_id", delete(delete_todo))
         .route("/todo", post(create_todo))
+        .route("/todo", get(get_all_todos))
         .with_state(Arc::new(state))
         .layer(TraceLayer::new_for_http())
 }
@@ -75,6 +76,25 @@ async fn delete_todo(
     tracing::info!("Deleted {} Todos", num_deleted);
 
     Ok(())
+}
+
+async fn get_all_todos(
+    State(state): State<Arc<AppState>>,
+) -> Result<Json<Vec<Todo>>, (StatusCode, String)> {
+    let mut conn = state.pool.get().map_err(internal_error)?;
+
+    tracing::info!("Retrieving all Todos records from the db.");
+
+    let todos = todos::dsl::todos
+        .select(Todo::as_select())
+        .load(&mut conn)
+        .optional();
+
+    match todos {
+        Ok(Some(todo)) => Ok(Json(todo)),
+        Ok(None) => Err(not_found_error("No records found.")),
+        Err(e) => Err(internal_error(e)),
+    }
 }
 
 // Map any error into a `500 Internal Server Error`
