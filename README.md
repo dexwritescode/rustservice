@@ -2,7 +2,23 @@
 
 [![CI](https://github.com/dexwritescode/todoservice/actions/workflows/ci.yaml/badge.svg)](https://github.com/dexwritescode/todoservice/actions/workflows/ci.yaml)
 
-RESTful Rust TODO service
+RESTful Rust Todo service
+
+## Running
+Start Postgres DB
+```
+docker-compose -f docker-compose.yml --profile infra up -d
+```
+
+Run the SQL migration
+```
+diesel migration run
+```
+
+Run todoservice
+```
+cargo run
+```
 
 ## License
 

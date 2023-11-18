@@ -12,7 +12,7 @@ services:
   db:
     container_name: db
     image: postgres:16
-    profiles: ["infrastructure"]
+    profiles: ["infra"]
     restart: always
     ports:
         - 5432:5432
@@ -31,16 +31,3 @@ services:
     environment:
       - COLLECTOR_OTLP_ENABLED=true
       - LOG_LEVEL=debug
-    #networks:
-    #  - jaeger-example
-
-  adminer:
-    container_name: adminer
-    image: adminer
-    profiles: ["infrastructure"]
-    restart: always
-    ports:
-      - 8080:8080
-
-#networks:
-#  jaeger-example:
