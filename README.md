@@ -6,17 +6,17 @@ RESTful Rust Todo service
 
 ## Running
 Start Postgres DB
-```
+```console
 docker-compose -f docker-compose.yml --profile infra up -d
 ```
 
 Run the SQL migration
-```
+```console
 diesel migration run
 ```
 
 Run todoservice
-```
+```console
 cargo run
 ```
 
