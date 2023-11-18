@@ -91,7 +91,7 @@ async fn get_all_todos(
         .optional();
 
     match todos {
-        Ok(Some(todo)) => Ok(Json(todo)),
+        Ok(Some(todos)) => Ok(Json(todos)),
         Ok(None) => Err(not_found_error("No records found.")),
         Err(e) => Err(internal_error(e)),
     }
