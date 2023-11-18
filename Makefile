@@ -11,7 +11,6 @@ builddocker: ## Build the docker image
 
 .PHONY: rundocker
 rundocker: ## Run the service container
-	#docker run -it --rm --name todoservice todoservice
 	docker run --rm --name todoservice todoservice
 
 .PHONY: build
@@ -30,13 +29,13 @@ buildrelease: ## Compile the service in release mode
 runrelease: ## Compile and run the service in release mode
 	cargo run --release
 
-.PHONY: platform-start
-platform-start: ## Start the service and its infrastructure dependencies
-	docker-compose -f docker-compose.yml --profile infrastructure up -d
+.PHONY: start-infra
+start-infra: ## Start the service and its infrastructure dependencies
+	docker-compose -f docker-compose.yml --profile infra up -d
 
-.PHONY: platform-stop
-platform-stop: ## Stop the service and its infrastructure dependencies
-	docker-compose -f docker-compose.yml --profile infrastructure stop
+.PHONY: stop-infra
+stop-infra: ## Stop the service and its infrastructure dependencies
+	docker-compose -f docker-compose.yml --profile infra stop
 
 .PHONY: start
 start: builddocker ## Start the service
@@ -46,10 +45,10 @@ start: builddocker ## Start the service
 stop: ## Stop the service
 	docker-compose -f docker-compose.yml --profile service stop
 
-.PHONY: tracing-start
-tracing-start: ## Start Jaeger tracing
+.PHONY: start-tracing
+start-tracing: ## Start Jaeger tracing
 	docker-compose -f docker-compose.yml --profile tracing up -d
 
-.PHONY: tracing-stop
-tracing-stop: ## Stop Jaeger tracing
+.PHONY: stop-tracing
+stop-tracing: ## Stop Jaeger tracing
 	docker-compose -f docker-compose.yml --profile tracing stop
