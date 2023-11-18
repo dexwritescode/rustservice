@@ -17,7 +17,12 @@ diesel migration run
 
 Run todoservice
 ```console
-cargo run
+cargo run --release
+```
+
+Run the tests
+```console
+cargo test
 ```
 
 ## License
