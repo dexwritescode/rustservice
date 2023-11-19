@@ -80,7 +80,35 @@ curl --location --request DELETE 'http://localhost:8080/todo/1'
 200 OK
 No response body returned
 
-
+### Get All Todos
+#### Request
+```shell
+curl --location 'http://localhost:8080/todo'
+```
+#### Response
+200 OK
+```json
+[
+    {
+        "id": 1,
+        "title": "title text",
+        "body": "body text",
+        "completed": false
+    },
+    {
+        "id": 2,
+        "title": "a todo",
+        "body": "a todo",
+        "completed": true
+    },
+    {
+        "id": 3,
+        "title": "Clean out your car",
+        "body": "busywork",
+        "completed": true
+    }
+]
+```
 
 
 
