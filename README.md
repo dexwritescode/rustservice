@@ -6,31 +6,140 @@ RESTful Rust Todo service
 
 ## Running
 Start Postgres DB
-```console
+```shell
 docker-compose --profile infra up -d
 ```
 
 Run the SQL migration
-```console
+```shell
 diesel migration run
 ```
 
 Run todoservice
-```console
+```shell
 cargo run --release
 ```
 
 Run the tests
-```console
+```shell
 cargo test
 ```
 
 Start Jaeger all-in-one docker container
-```console
+```shell
 docker-compose --profile tracing up -d
 ```
 
 Open Jaeger UI on `http://localhost:16686/`
+
+## REST API
+
+### Create Todo
+#### Request
+```shell
+curl --location 'http://localhost:8080/todo' \
+--header 'Content-Type: application/json' \
+--data '{
+    "title":"title text",
+    "body":"body text"
+}'
+```
+#### Response
+200 OK
+```json
+{
+    "id": 1,
+    "title": "title text",
+    "body": "body text",
+    "completed": false
+}
+```
+
+### Get Todo
+#### Request
+```shell
+curl --location 'http://localhost:8080/todo/1'
+```
+#### Response
+200 OK
+```json
+{
+    "id": 1,
+    "title": "title text",
+    "body": "body text",
+    "completed": false
+}
+```
+
+### Delete Todo
+#### Request
+```shell
+curl --location --request DELETE 'http://localhost:8080/todo/1'
+```
+#### Response
+200 OK - (Empty response body)
+
+### Get All Todos
+#### Request
+```shell
+curl --location 'http://localhost:8080/todo'
+```
+#### Response
+200 OK
+```json
+[
+    {
+        "id": 1,
+        "title": "title text",
+        "body": "body text",
+        "completed": false
+    },
+    {
+        "id": 2,
+        "title": "a todo",
+        "body": "a todo",
+        "completed": true
+    },
+    {
+        "id": 3,
+        "title": "Clean out your car",
+        "body": "busywork",
+        "completed": true
+    }
+]
+```
+
+### Create Random Todo
+#### Request
+```shell
+curl --location --request POST 'http://localhost:8080/todo/random'
+```
+#### Response
+200 OK
+```json
+{
+    "id": 3,
+    "title": "Clean out your car",
+    "body": "busywork",
+    "completed": false
+}
+```
+
+### Mark Todo Completed
+#### Request
+```shell
+curl --location --request PUT 'http://localhost:8080/todo/3'
+```
+#### Response
+200 OK
+```json
+{
+    "id": 3,
+    "title": "Clean out your car",
+    "body": "busywork",
+    "completed": true
+}
+```
 
 ## License
 
