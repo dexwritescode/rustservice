@@ -6,31 +6,54 @@ RESTful Rust Todo service
 
 ## Running
 Start Postgres DB
-```console
+```shell
 docker-compose --profile infra up -d
 ```
 
 Run the SQL migration
-```console
+```shell
 diesel migration run
 ```
 
 Run todoservice
-```console
+```shell
 cargo run --release
 ```
 
 Run the tests
-```console
+```shell
 cargo test
 ```
 
 Start Jaeger all-in-one docker container
-```console
+```shell
 docker-compose --profile tracing up -d
 ```
 
 Open Jaeger UI on `http://localhost:16686/`
+
+## REST API
+### Create Todo
+#### Request
+```shell
+curl --location 'http://localhost:8080/todo' \
+--header 'Content-Type: application/json' \
+--data '{
+    "title":"title text",
+    "body":"body text"
+}'
+```
+#### Response
+200 OK
+```json
+{
+    "id": 1,
+    "title": "title text",
+    "body": "body text",
+    "completed": false
+}
+```
+
 
 ## License
 
