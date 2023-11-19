@@ -7,7 +7,7 @@ RESTful Rust Todo service
 ## Running
 Start Postgres DB
 ```console
-docker-compose -f docker-compose.yml --profile infra up -d
+docker-compose --profile infra up -d
 ```
 
 Run the SQL migration
@@ -24,6 +24,13 @@ Run the tests
 ```console
 cargo test
 ```
+
+Start Jaeger all-in-one docker container
+```console
+docker-compose --profile tracing up -d
+```
+
+Open Jaeger UI on `http://localhost:16686/`
 
 ## License
 

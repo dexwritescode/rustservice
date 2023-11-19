@@ -1,5 +1,11 @@
 use configs::Configurations;
+use opentelemetry::global::shutdown_tracer_provider;
+use opentelemetry::{trace::TraceError, KeyValue};
+use opentelemetry_otlp::WithExportConfig;
+use opentelemetry_sdk::{runtime, trace as sdktrace, Resource};
 use std::net::SocketAddr;
+use tracing::info;
+use tracing_subscriber::prelude::*;
 
 mod app;
 mod configs;
@@ -8,14 +14,36 @@ pub mod models;
 pub mod schema;
 mod shutdown;
 
+fn init_tracer() -> Result<opentelemetry_sdk::trace::Tracer, TraceError> {
+    opentelemetry_otlp::new_pipeline()
+        .tracing()
+        .with_exporter(
+            opentelemetry_otlp::new_exporter()
+                .tonic()
+                .with_endpoint("http://localhost:4317"),
+        )
+        .with_trace_config(
+            sdktrace::config().with_resource(Resource::new(vec![KeyValue::new(
+                "service.name",
+                "todoservice",
+            )])),
+        )
+        .install_batch(runtime::Tokio)
+}
+
 #[tokio::main]
 async fn main() {
-    // initialize tracing
-    tracing_subscriber::fmt()
-        .with_max_level(tracing::Level::DEBUG)
-        .init();
-
+    // Load the configurations
     let config = Configurations::new().expect("Error loading the configurations.");
+
+    // initialize tracing
+    let tracer = init_tracer().expect("Failed to initialize tracer.");
+    let fmt_layer = tracing_subscriber::fmt::layer();
+    tracing_subscriber::registry()
+        .with(tracing_subscriber::EnvFilter::from(&config.logger.level))
+        .with(fmt_layer)
+        .with(tracing_opentelemetry::layer().with_tracer(tracer))
+        .init();
 
     let app_state = database::get_connection_pool(&config);
     let app = app::create_app(app_state);
@@ -25,13 +53,14 @@ async fn main() {
         .expect("Unable to parse socket address");
     let rx = shutdown::register();
 
-    tracing::info!("Starting server on {:?}", address);
+    info!("Starting server on {:?}", address);
     axum::Server::bind(&address)
         .serve(app.into_make_service())
         .with_graceful_shutdown(async {
             rx.await.ok(); // This will block until a shutdown signal is received
-            tracing::info!("Handling graceful shutdown");
-            tracing::info!("Close resources, drain and shutdown event handler... etc");
+            info!("Handling graceful shutdown");
+            info!("Close resources, drain and shutdown event handler... etc");
+            shutdown_tracer_provider();
         })
         .await
         .expect("Failed to start server");

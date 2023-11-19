@@ -4,11 +4,11 @@ use diesel::r2d2::Pool;
 
 use crate::configs::Configurations;
 
+#[derive(Debug)]
 pub struct AppState {
     pub pool: Pool<ConnectionManager<PgConnection>>,
 }
 
-//Pool<ConnectionManager<PgConnection>>
 pub fn get_connection_pool(config: &Configurations) -> AppState {
     let url = get_database_url(config);
     let manager = ConnectionManager::<PgConnection>::new(url);
