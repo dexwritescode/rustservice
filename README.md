@@ -33,6 +33,7 @@ docker-compose --profile tracing up -d
 Open Jaeger UI on `http://localhost:16686/`
 
 ## REST API
+
 ### Create Todo
 #### Request
 ```shell
@@ -53,6 +54,24 @@ curl --location 'http://localhost:8080/todo' \
     "completed": false
 }
 ```
+
+### Get Todo
+#### Request
+```shell
+curl --location 'http://localhost:8080/todo/1'
+```
+#### Response
+200 OK
+```json
+{
+    "id": 1,
+    "title": "title text",
+    "body": "body text",
+    "completed": false
+}
+```
+
+
 
 
 ## License
