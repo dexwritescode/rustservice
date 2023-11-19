@@ -126,6 +126,21 @@ curl --location --request POST 'http://localhost:8080/todo/random'
 }
 ```
 
+### Mark Todo Completed
+#### Request
+```shell
+curl --location --request PUT 'http://localhost:8080/todo/3'
+```
+#### Response
+200 OK
+```json
+{
+    "id": 3,
+    "title": "Clean out your car",
+    "body": "busywork",
+    "completed": true
+}
+```
 
 ## License
 
