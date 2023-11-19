@@ -71,6 +71,16 @@ curl --location 'http://localhost:8080/todo/1'
 }
 ```
 
+### Delete Todo
+#### Request
+```shell
+curl --location --request DELETE 'http://localhost:8080/todo/1'
+```
+#### Response
+200 OK
+No response body returned
+
+
 
 
 
