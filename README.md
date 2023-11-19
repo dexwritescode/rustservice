@@ -110,6 +110,21 @@ curl --location 'http://localhost:8080/todo'
 ]
 ```
 
+### Create Random Todo
+#### Request
+```shell
+curl --location --request POST 'http://localhost:8080/todo/random'
+```
+#### Response
+200 OK
+```json
+{
+    "id": 3,
+    "title": "Clean out your car",
+    "body": "busywork",
+    "completed": false
+}
+```
 
 
 ## License
