@@ -77,8 +77,7 @@ curl --location 'http://localhost:8080/todo/1'
 curl --location --request DELETE 'http://localhost:8080/todo/1'
 ```
 #### Response
-200 OK
-No response body returned
+200 OK - (Empty response body)
 
 ### Get All Todos
 #### Request
