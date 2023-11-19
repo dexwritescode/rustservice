@@ -32,6 +32,8 @@ docker-compose --profile tracing up -d
 
 Open Jaeger UI on `http://localhost:16686/`
 
+<img width="1286" alt="jaeger" src="https://github.com/dexwritescode/todoservice/assets/27153243/283daa79-67e1-44bb-ab94-802b8aee7cb8">
+
 ## REST API
 
 ### Create Todo
