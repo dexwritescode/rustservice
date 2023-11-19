@@ -12,6 +12,6 @@
     "password": "todopassword"
   },
   "logger": {
-    "level": "debug"
+    "level": "DEBUG"
   }
 }

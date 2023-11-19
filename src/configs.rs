@@ -70,7 +70,7 @@ mod test {
         temp_env::with_vars([("ENV", Some("production"))], || {
             let actual = Configurations::new().unwrap();
             assert_eq!(actual.environment, "production");
-            assert_eq!(actual.logger.level, "info");
+            assert_eq!(actual.logger.level, "INFO");
             assert_eq!(actual.server.host, "0.0.0.0");
             assert_eq!(actual.server.port, 8080);
             assert_eq!(actual.database.host, "localhost");
@@ -87,7 +87,7 @@ mod test {
             let actual = Configurations::new().unwrap();
             assert_eq!(actual.environment, "development");
             assert_eq!(actual.server.port, 8899);
-            assert_eq!(actual.logger.level, "debug");
+            assert_eq!(actual.logger.level, "DEBUG");
         });
     }
 }

@@ -9,6 +9,7 @@ use diesel::prelude::*;
 use diesel::RunQueryDsl;
 use std::sync::Arc;
 use tower_http::trace::TraceLayer;
+use tracing::{info, instrument};
 
 use crate::schema::todos::id;
 use crate::{
@@ -29,13 +30,14 @@ pub fn create_app(state: AppState) -> Router {
         .layer(TraceLayer::new_for_http())
 }
 
+#[instrument]
 async fn create_todo(
     State(state): State<Arc<AppState>>,
     Json(new_todo): Json<NewTodo>,
 ) -> Result<Json<Todo>, (StatusCode, String)> {
     let mut conn = state.pool.get().map_err(internal_error)?;
 
-    tracing::info!("Creating Todo {:?}", &new_todo);
+    info!("Creating Todo {:?}", &new_todo);
 
     let res = diesel::insert_into(todos::table)
         .values(&new_todo)
@@ -46,13 +48,14 @@ async fn create_todo(
     Ok(Json(res))
 }
 
+#[instrument]
 async fn get_todo(
     State(state): State<Arc<AppState>>,
     Path(todo_id): Path<i32>,
 ) -> Result<Json<Todo>, (StatusCode, String)> {
     let mut conn = state.pool.get().map_err(internal_error)?;
 
-    tracing::info!("Retrieving Todo record from the db. id: {}", &todo_id);
+    info!("Retrieving Todo record from the db. id: {}", &todo_id);
 
     let todo = todos::dsl::todos
         .find(todo_id)
@@ -67,13 +70,14 @@ async fn get_todo(
     }
 }
 
+#[instrument]
 async fn complete_todo(
     State(state): State<Arc<AppState>>,
     Path(todo_id): Path<i32>,
 ) -> Result<(), (StatusCode, String)> {
     let mut conn = state.pool.get().map_err(internal_error)?;
 
-    tracing::info!("Marking Todo as completed. id: {}", &todo_id);
+    info!("Marking Todo as completed. id: {}", &todo_id);
 
     let todo = diesel::update(todos::dsl::todos.find(todo_id))
         .set(todos::completed.eq(true))
@@ -81,34 +85,36 @@ async fn complete_todo(
         .get_result(&mut conn)
         .map_err(internal_error)?;
 
-    tracing::info!("Completed Todo {:?}", &todo);
+    info!("Completed Todo {:?}", &todo);
 
     Ok(())
 }
 
+#[instrument]
 async fn delete_todo(
     State(state): State<Arc<AppState>>,
     Path(todo_id): Path<i32>,
 ) -> Result<(), (StatusCode, String)> {
     let conn = &mut state.pool.get().map_err(internal_error)?;
 
-    tracing::info!("Deleting Todo record from the db. id: {}", &todo_id);
+    info!("Deleting Todo record from the db. id: {}", &todo_id);
 
     let num_deleted = diesel::delete(todos::dsl::todos.filter(id.eq(todo_id)))
         .execute(conn)
         .map_err(internal_error)?;
 
-    tracing::info!("Deleted {} Todos", num_deleted);
+    info!("Deleted {} Todos", num_deleted);
 
     Ok(())
 }
 
+#[instrument]
 async fn get_all_todos(
     State(state): State<Arc<AppState>>,
 ) -> Result<Json<Vec<Todo>>, (StatusCode, String)> {
     let mut conn = state.pool.get().map_err(internal_error)?;
 
-    tracing::info!("Retrieving all Todos from the db.");
+    info!("Retrieving all Todos from the db.");
 
     let todos = todos::dsl::todos
         .select(Todo::as_select())
@@ -129,6 +135,7 @@ pub struct Activity {
     pub activity_type: String,
 }
 
+#[instrument]
 async fn create_random_todo(
     State(state): State<Arc<AppState>>,
 ) -> Result<Json<Todo>, (StatusCode, String)> {
@@ -139,7 +146,7 @@ async fn create_random_todo(
         .await
         .map_err(internal_error)?;
 
-    tracing::info!("Got: {:?}", random_activity);
+    info!("Got: {:?}", random_activity);
 
     let new_todo = NewTodo {
         title: random_activity.activity,
@@ -148,7 +155,7 @@ async fn create_random_todo(
 
     let mut conn = state.pool.get().map_err(internal_error)?;
 
-    tracing::info!("Creating random Todo {:?}", &new_todo);
+    info!("Creating random Todo {:?}", &new_todo);
 
     let res = diesel::insert_into(todos::table)
         .values(&new_todo)
