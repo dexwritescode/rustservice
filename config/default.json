@@ -13,5 +13,11 @@
   },
   "logger": {
     "level": "DEBUG"
+  },
+  "tracing": {
+    "host": "http://localhost:4317"
+  },
+  "service": {
+    "name": "todoservice"
   }
 }

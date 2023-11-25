@@ -23,11 +23,23 @@ pub struct Database {
 }
 
 #[derive(Debug, Clone, Deserialize)]
+pub struct Service {
+    pub name: String,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct Tracing {
+    pub host: String,
+}
+
+#[derive(Debug, Clone, Deserialize)]
 pub struct Configurations {
     pub environment: String,
     pub server: Server,
     pub logger: Logger,
     pub database: Database,
+    pub service: Service,
+    pub tracing: Tracing,
 }
 
 impl Configurations {
@@ -78,6 +90,8 @@ mod test {
             assert_eq!(actual.database.name, "tododb");
             assert_eq!(actual.database.user, "todouser");
             assert_eq!(actual.database.password, "todopassword");
+            assert_eq!(actual.service.name, "todoservice");
+            assert_eq!(actual.tracing.host, "http://localhost:4317");
         });
     }
 

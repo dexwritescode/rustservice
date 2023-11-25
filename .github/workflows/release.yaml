@@ -16,4 +16,4 @@ jobs:
     steps:
       - uses: dexwritescode/release-on-merge-action@v1.1.0
         with:
-          version-increment-strategy: major
+          version-increment-strategy: patch
