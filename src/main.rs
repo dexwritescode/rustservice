@@ -14,18 +14,18 @@ pub mod models;
 pub mod schema;
 mod shutdown;
 
-fn init_tracer() -> Result<opentelemetry_sdk::trace::Tracer, TraceError> {
+fn init_tracer(config: &Configurations) -> Result<opentelemetry_sdk::trace::Tracer, TraceError> {
     opentelemetry_otlp::new_pipeline()
         .tracing()
         .with_exporter(
             opentelemetry_otlp::new_exporter()
                 .tonic()
-                .with_endpoint("http://localhost:4317"),
+                .with_endpoint(config.tracing.host.clone()),
         )
         .with_trace_config(
             sdktrace::config().with_resource(Resource::new(vec![KeyValue::new(
                 "service.name",
-                "todoservice",
+                config.service.name.clone(),
             )])),
         )
         .install_batch(runtime::Tokio)
@@ -37,7 +37,7 @@ async fn main() {
     let config = Configurations::new().expect("Error loading the configurations.");
 
     // initialize tracing
-    let tracer = init_tracer().expect("Failed to initialize tracer.");
+    let tracer = init_tracer(&config).expect("Failed to initialize tracer.");
     let fmt_layer = tracing_subscriber::fmt::layer();
     tracing_subscriber::registry()
         .with(tracing_subscriber::EnvFilter::from(&config.logger.level))

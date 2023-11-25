@@ -34,7 +34,7 @@ fn get_database_url(config: &Configurations) -> String {
 
 #[cfg(test)]
 mod test {
-    use crate::configs::{Database, Logger, Server};
+    use crate::configs::{Database, Logger, Server, Service, Tracing};
 
     use super::*;
 
@@ -55,6 +55,12 @@ mod test {
                 user: "user".to_string(),
                 password: "password".to_string(),
                 port: 1234,
+            },
+            service: Service {
+                name: "rustservice".to_string(),
+            },
+            tracing: Tracing {
+                host: "localhost".to_string(),
             },
         };
         let url = get_database_url(&config);
